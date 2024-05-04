@@ -1,4 +1,4 @@
-name: "@gnome/env CI"
+name: "@gnome/fs CI"
 
 on:
   push:

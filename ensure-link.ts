@@ -15,7 +15,7 @@ import { link, linkSync } from "./base.ts";
  *
  * @example
  * ```ts
- * import { ensureLink } from "https://deno.land/std@$STD_VERSION/fs/ensure_link.ts";
+ * import { ensureLink } from "@gnome/fs";
  *
  * await ensureLink("./folder/targetFile.dat", "./folder/targetFile.link.dat");
  * ```
@@ -38,7 +38,7 @@ export async function ensureLink(src: string | URL, dest: string | URL) {
  *
  * @example
  * ```ts
- * import { ensureLinkSync } from "https://deno.land/std@$STD_VERSION/fs/ensure_link.ts";
+ * import { ensureLinkSync } from "@gnome/fs";
  *
  * ensureLinkSync("./folder/targetFile.dat", "./folder/targetFile.link.dat");
  * ```

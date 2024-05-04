@@ -8,14 +8,14 @@ import { isNotFoundError } from "./base.ts";
  * contents it is not empty. If the directory does not exist, it is created.
  * The directory itself is not deleted.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param dir The path of the directory to empty, as a string or URL.
  * @returns A void promise that resolves once the directory is empty.
  *
  * @example
  * ```ts
- * import { emptyDir } from "https://deno.land/std@$STD_VERSION/fs/empty_dir.ts";
+ * import { emptyDir } from "@gnome/fs";
  *
  * await emptyDir("./foo");
  * ```
@@ -47,14 +47,14 @@ export async function emptyDir(dir: string | URL) {
  * contents it is not empty. If the directory does not exist, it is created.
  * The directory itself is not deleted.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param dir The path of the directory to empty, as a string or URL.
  * @returns A void value that returns once the directory is empty.
  *
  * @example
  * ```ts
- * import { emptyDirSync } from "https://deno.land/std@$STD_VERSION/fs/empty_dir.ts";
+ * import { emptyDirSync } from "@gnome/fs";
  *
  * emptyDirSync("./foo");
  * ```

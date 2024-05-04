@@ -2,7 +2,7 @@
 import { dirname, resolve } from "@std/path";
 import { ensureDir, ensureDirSync } from "./ensure-dir.ts";
 import { getFileInfoType, toPathString } from "./utils.ts";
-import { lstat, lstatSync, readLink, readLinkSync, symlink, symlinkSync, isAlreadyExistsError  } from "./base.ts";
+import { isAlreadyExistsError, lstat, lstatSync, readLink, readLinkSync, symlink, symlinkSync } from "./base.ts";
 import type { SymlinkOptions } from "./types.ts";
 import { AlreadyExistsError } from "./errors.ts";
 import { WINDOWS } from "./constants.ts";
@@ -24,7 +24,7 @@ function resolveSymlinkTarget(target: string | URL, linkName: string | URL) {
  * exists, it is not modified but error is thrown if it is not point to the
  * given target.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param target The source file path as a string or URL.
  * @param linkName The destination link path as a string or URL.
@@ -32,7 +32,7 @@ function resolveSymlinkTarget(target: string | URL, linkName: string | URL) {
  *
  * @example
  * ```ts
- * import { ensureSymlink } from "https://deno.land/std@$STD_VERSION/fs/ensure_symlink.ts";
+ * import { ensureSymlink } from "@gnome/fs";
  *
  * await ensureSymlink("./folder/targetFile.dat", "./folder/targetFile.link.dat");
  * ```
@@ -56,9 +56,8 @@ export async function ensureSymlink(
     try {
         await symlink(target, linkName, options);
     } catch (error) {
-       
         if (!(isAlreadyExistsError(error))) {
-            console.log("### throwing error ####")
+            console.log("### throwing error ####");
             console.log(error);
             console.log(error instanceof Deno.errors.AlreadyExists);
             throw error;
@@ -86,7 +85,7 @@ export async function ensureSymlink(
  * exists, it is not modified but error is thrown if it is not point to the
  * given target.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param target The source file path as a string or URL.
  * @param linkName The destination link path as a string or URL.
@@ -94,7 +93,7 @@ export async function ensureSymlink(
  *
  * @example
  * ```ts
- * import { ensureSymlinkSync } from "https://deno.land/std@$STD_VERSION/fs/ensure_symlink.ts";
+ * import { ensureSymlinkSync } from "@gnome/fs";
  *
  * ensureSymlinkSync("./folder/targetFile.dat", "./folder/targetFile.link.dat");
  * ```

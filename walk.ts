@@ -127,7 +127,7 @@ export type { WalkEntry };
  * ```
  *
  * ```ts
- * import { walk } from "https://deno.land/std@$STD_VERSION/fs/walk.ts";
+ * import { walk } from "@gnome/fs";
  *
  * const entries = [];
  * for await (const entry of walk(".")) {
@@ -252,14 +252,14 @@ export function* walkSync(
 
         if (isSymlink) {
             if (!followSymlinks) {
-                console.log("not following symlink:", root)
+                console.log("not following symlink:", root);
                 if (includeSymlinks && include(path, exts, match, skip)) {
                     yield { path, ...entry };
                 }
                 continue;
             }
 
-            console.log("following symlink:", root)
+            console.log("following symlink:", root);
             const realPath = realPathSync(path);
             if (canonicalize) {
                 path = realPath;

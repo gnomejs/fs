@@ -82,7 +82,6 @@ export function copyFileSync(
     fs.copyFileSync(src, dest);
 }
 
-
 export function isDir(path: string | URL): Promise<boolean> {
     return fsa.stat(path)
         .then((stat) => stat.isDirectory())
@@ -206,13 +205,12 @@ export function makeTempDirSync(options?: MakeTempOptions): string {
         options.dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
     }
 
-  
     let dir = options.dir;
     if (options.prefix) {
         dir = join(dir, options.prefix);
     }
 
-    return fs.mkdtempSync(dir)
+    return fs.mkdtempSync(dir);
 }
 
 export async function makeTempDir(options?: MakeTempOptions): Promise<string> {
@@ -223,7 +221,6 @@ export async function makeTempDir(options?: MakeTempOptions): Promise<string> {
         options.dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
     }
 
-    
     let dir = options.dir;
     if (options.prefix) {
         dir = join(dir, options.prefix);
@@ -267,7 +264,7 @@ export async function makeTempFile(options?: MakeTempOptions): Promise<string> {
     const file = `${options.dir}${sep}${r}`;
 
     fs.writeFileSync(file, new Uint8Array(0), { mode: 0o644 });
-    
+
     return file;
 }
 
@@ -288,7 +285,7 @@ export function makeDirSync(
 export function stat(path: string | URL): Promise<FileInfo> {
     return fsa.stat(path).then((stat) => {
         const p = path instanceof URL ? path.toString() : path;
-        console.log(path, stat.isSymbolicLink())
+        console.log(path, stat.isSymbolicLink());
         return {
             isFile: stat.isFile(),
             isDirectory: stat.isDirectory(),
@@ -375,7 +372,7 @@ export function readDir(
         const data = await fsa.readdir(path);
         for (const d of data) {
             const info = await lstat(join(path, d));
-            
+
             yield {
                 name: d,
                 isFile: info.isFile,
@@ -491,20 +488,21 @@ export async function remove(
     path: string | URL,
     options?: RemoveOptions,
 ): Promise<void> {
-
     const isFolder = await isDir(path);
-    if (isFolder)
-        return await fsa.rmdir(path, { ...options } );
+    if (isFolder) {
+        return await fsa.rmdir(path, { ...options });
+    }
 
-    return fsa.rm(path, { ...options, force: true, } );
+    return fsa.rm(path, { ...options, force: true });
 }
 
 export function removeSync(path: string | URL, options?: RemoveOptions): void {
     const isFolder = isDirSync(path);
-    if (isFolder)
-        return fs.rmdirSync(path, { ...options } );
+    if (isFolder) {
+        return fs.rmdirSync(path, { ...options });
+    }
 
-    return fs.rmSync(path, { ...options, force: true, } );
+    return fs.rmSync(path, { ...options, force: true });
 }
 
 export function symlink(

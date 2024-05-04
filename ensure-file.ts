@@ -10,14 +10,14 @@ import { isNotFoundError } from "./base.ts";
  * be created is in directories that do not exist, these directories are created.
  * If the file already exists, it is not modified.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param filePath The path of the file to ensure, as a string or URL.
  * @returns A void promise that resolves once the file exists.
  *
  * @example
  * ```ts
- * import { ensureFile } from "https://deno.land/std@$STD_VERSION/fs/ensure_file.ts";
+ * import { ensureFile } from "@gnome/fs";
  *
  * await ensureFile("./folder/targetFile.dat");
  * ```
@@ -50,14 +50,14 @@ export async function ensureFile(filePath: string | URL): Promise<void> {
  * be created is in directories that do not exist, these directories are created.
  * If the file already exists, it is not modified.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param filePath The path of the file to ensure, as a string or URL.
  * @returns A void value that returns once the file exists.
  *
  * @example
  * ```ts
- * import { ensureFileSync } from "https://deno.land/std@$STD_VERSION/fs/ensure_file.ts";
+ * import { ensureFileSync } from "@gnome/fs";
  *
  * ensureFileSync("./folder/targetFile.dat");
  * ```

@@ -75,7 +75,7 @@ function comparePath(a: WalkEntry, b: WalkEntry): number {
  * If `root` is not provided, the current working directory is used.
  * The `root` directory is not included in the yielded file paths.
  *
- * Requires the `--allow-read` flag.
+ * Requires the `--allow-read` flag when using Deno.
  *
  * @param glob The glob pattern to expand.
  * @param options Additional options for the expansion.
@@ -93,7 +93,7 @@ function comparePath(a: WalkEntry, b: WalkEntry): number {
  *
  * ```ts
  * // script.ts
- * import { expandGlob } from "https://deno.land/std@$STD_VERSION/fs/expand_glob.ts";
+ * import { expandGlob } from "@gnome/fs";
  *
  * const entries = [];
  * for await (const entry of expandGlob("*.ts")) {
@@ -233,7 +233,7 @@ export async function* expandGlob(
  * If `root` is not provided, the current working directory is used.
  * The `root` directory is not included in the yielded file paths.
  *
- * Requires the `--allow-read` flag.
+ * Requires the `--allow-read` flag when using Deno.
  *
  * @param glob The glob pattern to expand.
  * @param options Additional options for the expansion.
@@ -250,7 +250,7 @@ export async function* expandGlob(
  *
  * ```ts
  * // script.ts
- * import { expandGlobSync } from "https://deno.land/std@$STD_VERSION/fs/expand_glob.ts";
+ * import { expandGlobSync } from "@gnome/fs";
  *
  * const entries = [];
  * for (const entry of expandGlobSync("*.ts")) {

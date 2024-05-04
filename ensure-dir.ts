@@ -7,14 +7,14 @@ import { getFileInfoType } from "./utils.ts";
  * Asynchronously ensures that the directory exists. If the directory structure
  * does not exist, it is created. Like `mkdir -p`.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param dir The path of the directory to ensure, as a string or URL.
  * @returns A promise that resolves once the directory exists.
  *
  * @example
  * ```ts
- * import { ensureDir } from "https://deno.land/std@$STD_VERSION/fs/ensure_dir.ts";
+ * import { ensureDir } from "@gnome/fs";
  *
  * await ensureDir("./bar");
  * ```
@@ -54,14 +54,14 @@ export async function ensureDir(dir: string | URL) {
  * Synchronously ensures that the directory exists. If the directory structure
  * does not exist, it is created. Like `mkdir -p`.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param dir The path of the directory to ensure, as a string or URL.
  * @returns A void value that returns once the directory exists.
  *
  * @example
  * ```ts
- * import { ensureDir } from "https://deno.land/std@$STD_VERSION/fs/ensure_dir.ts";
+ * import { ensureDir } from "@gnome/fs";
  *
  * await ensureDir("./bar");
  * ```

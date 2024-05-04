@@ -302,7 +302,7 @@ function copyDirSync(
  * not the entire directory itself. If `src` is a file, `dest` cannot be a
  * directory.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param src The source file/directory path as a string or URL.
  * @param dest The destination file/directory path as a string or URL.
@@ -311,7 +311,7 @@ function copyDirSync(
  *
  * @example Basic usage
  * ```ts
- * import { copy } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copy } from "@gnome/fs";
  *
  * await copy("./foo", "./bar");
  * ```
@@ -321,7 +321,7 @@ function copyDirSync(
  *
  * @example Overwriting files/directories
  * ```ts
- * import { copy } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copy } from "@gnome/fs";
  *
  * await copy("./foo", "./bar", { overwrite: true });
  * ```
@@ -331,7 +331,7 @@ function copyDirSync(
  *
  * @example Preserving timestamps
  * ```ts
- * import { copy } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copy } from "@gnome/fs";
  *
  * await copy("./foo", "./bar", { preserveTimestamps: true });
  * ```
@@ -376,7 +376,7 @@ export async function copy(
  * not the entire directory itself. If `src` is a file, `dest` cannot be a
  * directory.
  *
- * Requires the `--allow-read` and `--allow-write` flag.
+ * Requires the `--allow-read` and `--allow-write` flag when using Deno.
  *
  * @param src The source file/directory path as a string or URL.
  * @param dest The destination file/directory path as a string or URL.
@@ -385,7 +385,7 @@ export async function copy(
  *
  * @example Basic usage
  * ```ts
- * import { copySync } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copySync } from "@gnome/fs";
  *
  * copySync("./foo", "./bar");
  * ```
@@ -395,7 +395,7 @@ export async function copy(
  *
  * @example Overwriting files/directories
  * ```ts
- * import { copySync } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copySync } from "@gnome/fs";
  *
  * copySync("./foo", "./bar", { overwrite: true });
  * ```
@@ -405,7 +405,7 @@ export async function copy(
  *
  * @example Preserving timestamps
  * ```ts
- * import { copySync } from "https://deno.land/std@$STD_VERSION/fs/copy.ts";
+ * import { copySync } from "@gnome/fs";
  *
  * copySync("./foo", "./bar", { preserveTimestamps: true });
  * ```

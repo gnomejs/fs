@@ -25,7 +25,7 @@ export interface MoveOptions {
  *
  * @example Basic usage
  * ```ts
- * import { move } from "https://deno.land/std@$STD_VERSION/fs/move.ts";
+ * import { move } from "@gnome/fs";
  *
  * await move("./foo", "./bar");
  * ```
@@ -35,7 +35,7 @@ export interface MoveOptions {
  *
  * @example Overwriting
  * ```ts
- * import { move } from "https://deno.land/std@$STD_VERSION/fs/move.ts";
+ * import { move } from "@gnome/fs";
  *
  * await move("./foo", "./bar", { overwrite: true });
  * ```
@@ -88,7 +88,7 @@ export async function move(
  *
  * @example Basic usage
  * ```ts
- * import { moveSync } from "https://deno.land/std@$STD_VERSION/fs/move.ts";
+ * import { moveSync } from "@gnome/fs";
  *
  * moveSync("./foo", "./bar");
  * ```
@@ -98,7 +98,7 @@ export async function move(
  *
  * @example Overwriting
  * ```ts
- * import { moveSync } from "https://deno.land/std@$STD_VERSION/fs/move.ts";
+ * import { moveSync } from "@gnome/fs";
  *
  * moveSync("./foo", "./bar", { overwrite: true });
  * ```

@@ -1,6 +1,10 @@
 import { SystemError } from "jsr:@gnome/errors@^0.0.0";
 
+/**
+ * Represents an error that occurs when a file or directory already exists.
+ */
 export class AlreadyExistsError extends SystemError {
+    /** Constructs a new instance. */
     constructor(message: string, innerError?: Error) {
         super(message, innerError);
         this.name = "AlreadyExistsError";

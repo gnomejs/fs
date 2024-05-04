@@ -5,6 +5,7 @@ export interface FsError extends Error {
     errno?: number;
 }
 
+/**  */
 export interface DirectoryInfo {
     name: string;
     isFile: boolean;
@@ -17,12 +18,12 @@ export interface WalkEntry extends DirectoryInfo {
     path: string;
 }
 
-export type X = Deno.DirEntry;
-
+/** Options for {@linkcode remove} and {@linkcode removeSync}  */
 export interface RemoveOptions {
     recursive?: boolean;
 }
 
+/** Options for  {@linkcode makeDir} and {@linkcode makeDirSync}  */
 export interface CreateDirectoryOptions {
     recursive?: boolean;
     mode?: number;
@@ -53,9 +54,9 @@ export interface ExistsOptions {
 }
 
 /**
- * Options which can be set when using {@linkcode Deno.makeTempDir},
- * {@linkcode Deno.makeTempDirSync}, {@linkcode Deno.makeTempFile}, and
- * {@linkcode Deno.makeTempFileSync}.
+ * Options which can be set when using {@linkcode makeTempDir},
+ * {@linkcode makeTempDirSync}, {@linkcode makeTempFile}, and
+ * {@linkcode makeTempFileSync}.
  *
  * @category File System */
 export interface MakeTempOptions {
@@ -72,15 +73,6 @@ export interface MakeTempOptions {
     /** String that should follow the random portion of the temporary
      * directory's name. */
     suffix?: string;
-}
-
-export interface CopyOptions {
-    overwrite?: boolean;
-    preserveTimestamps?: boolean;
-}
-
-export interface MoveOptions {
-    overwrite?: boolean;
 }
 
 export interface WriteOptions {
@@ -107,8 +99,10 @@ export interface ReadOptions {
  * @category File System
  */
 export interface FileInfo {
+    /** The name of the file, including the extension.  */
     name: string;
 
+    /** The full path of the file */
     path?: string;
 
     /** True if this is info for a regular file. Mutually exclusive to
@@ -187,10 +181,6 @@ export interface FileInfo {
     isSocket?: boolean | null;
 }
 
-export interface WriteJsonOptions extends WriteOptions {
-    spaces: number;
-}
-
 /** Options that can be used with {@linkcode symlink} and
  * {@linkcode symlinkSync}.
  *
@@ -201,6 +191,7 @@ export interface SymlinkOptions {
     type: "file" | "dir";
 }
 
+/** File interface  */
 export interface FsFile {
     writeSync(p: Uint8Array): number;
     write(p: Uint8Array): Promise<number>;
@@ -208,149 +199,399 @@ export interface FsFile {
     read(p: Uint8Array): Promise<number | null>;
 }
 
+/**
+ * Represents a file system with various methods for interacting with files and directories.
+ */
 export interface FileSystem {
+    /**
+     * Changes the permissions of a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @param mode - The new permissions mode.
+     * @returns A promise that resolves when the operation is complete.
+     */
     chmod(path: string | URL, mode: number): Promise<void>;
 
+    /**
+     * Changes the permissions of a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @param mode - The new permissions mode.
+     */
     chmodSync(path: string | URL, mode: number): void;
 
+    /**
+     * Changes the owner and group of a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @param uid - The new owner user ID.
+     * @param gid - The new owner group ID.
+     * @returns A promise that resolves when the operation is complete.
+     */
     chown(
         path: string | URL,
         uid: number,
         gid: number,
     ): Promise<void>;
 
+    /**
+     * Changes the owner and group of a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @param uid - The new owner user ID.
+     * @param gid - The new owner group ID.
+     */
     chownSync(path: string | URL, uid: number, gid: number): void;
 
+    /**
+     * Gets the current working directory.
+     * @returns The current working directory.
+     */
     cwd(): string;
 
+    /**
+     * Copies a file asynchronously.
+     * @param from - The path to the source file.
+     * @param to - The path to the destination file.
+     * @returns A promise that resolves when the operation is complete.
+     */
     copyFile(
         from: string | URL,
         to: string | URL,
     ): Promise<void>;
 
+    /**
+     * Copies a file synchronously.
+     * @param from - The path to the source file.
+     * @param to - The path to the destination file.
+     */
     copyFileSync(
         from: string | URL,
         to: string | URL,
     ): void;
 
+    /**
+     * Checks if a path is a directory asynchronously.
+     * @param path - The path to check.
+     * @returns A promise that resolves with a boolean indicating whether the path is a directory.
+     */
     isDir(path: string | URL): Promise<boolean>;
 
+    /**
+     * Checks if a path is a directory synchronously.
+     * @param path - The path to check.
+     * @returns A boolean indicating whether the path is a directory.
+     */
     isDirSync(path: string | URL): boolean;
 
+    /**
+     * Checks if a path is a file asynchronously.
+     * @param path - The path to check.
+     * @returns A promise that resolves with a boolean indicating whether the path is a file.
+     */
     isFile(path: string | URL): Promise<boolean>;
 
+    /**
+     * Checks if a path is a file synchronously.
+     * @param path - The path to check.
+     * @returns A boolean indicating whether the path is a file.
+     */
     isFileSync(path: string | URL): boolean;
 
+    /**
+     * Checks if an error indicates that a file or directory already exists.
+     * @param err - The error to check.
+     * @returns A boolean indicating whether the error indicates that the file or directory already exists.
+     */
     isAlreadyExistsError(err: unknown): boolean;
 
+    /**
+     * Checks if an error indicates that a file or directory was not found.
+     * @param err - The error to check.
+     * @returns A boolean indicating whether the error indicates that the file or directory was not found.
+     */
     isNotFoundError(err: unknown): boolean;
 
+    /**
+     * Creates a hard link asynchronously.
+     * @param oldPath - The path to the existing file.
+     * @param newPath - The path to the new link.
+     * @returns A promise that resolves when the operation is complete.
+     */
     link(oldPath: string | URL, newPath: string | URL): Promise<void>;
 
+    /**
+     * Creates a hard link synchronously.
+     * @param oldPath - The path to the existing file.
+     * @param newPath - The path to the new link.
+     */
     linkSync(oldPath: string | URL, newPath: string | URL): void;
 
+    /**
+     * Gets information about a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @returns A promise that resolves with the file information.
+     */
     lstat(path: string | URL): Promise<FileInfo>;
 
+    /**
+     * Gets information about a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @returns The file information.
+     */
     lstatSync(path: string | URL): FileInfo;
 
+    /**
+     * Creates a directory asynchronously.
+     * @param path - The path to the directory.
+     * @param options - The options for creating the directory (optional).
+     * @returns A promise that resolves when the operation is complete.
+     */
     makeDir(
         path: string | URL,
         options?: CreateDirectoryOptions | undefined,
     ): Promise<void>;
 
+    /**
+     * Creates a directory synchronously.
+     * @param path - The path to the directory.
+     * @param options - The options for creating the directory (optional).
+     */
     makeDirSync(
         path: string | URL,
         options?: CreateDirectoryOptions | undefined,
     ): void;
 
+    /**
+     * Creates a temporary directory synchronously.
+     * @param options - The options for creating the temporary directory (optional).
+     * @returns The path to the created temporary directory.
+     */
     makeTempDirSync(options?: MakeTempOptions): string;
 
+    /**
+     * Creates a temporary directory asynchronously.
+     * @param options - The options for creating the temporary directory (optional).
+     * @returns A promise that resolves with the path to the created temporary directory.
+     */
     makeTempDir(options?: MakeTempOptions): Promise<string>;
 
+    /**
+     * Reads the contents of a directory asynchronously.
+     * @param path - The path to the directory.
+     * @returns An async iterable that yields directory information.
+     */
     readDir(
         path: string | URL,
     ): AsyncIterable<DirectoryInfo>;
 
+    /**
+     * Reads the contents of a directory synchronously.
+     * @param path - The path to the directory.
+     * @returns An iterable that yields directory information.
+     */
     readDirSync(
         path: string | URL,
     ): Iterable<DirectoryInfo>;
 
+    /**
+     * Reads the contents of a file asynchronously.
+     * @param path - The path to the file.
+     * @param options - The options for reading the file (optional).
+     * @returns A promise that resolves with the file contents as a Uint8Array.
+     */
     readFile(path: string | URL, options?: ReadOptions): Promise<Uint8Array>;
 
+    /**
+     * Reads the contents of a file synchronously.
+     * @param path - The path to the file.
+     * @returns The file contents as a Uint8Array.
+     */
     readFileSync(path: string | URL): Uint8Array;
 
+    /**
+     * Reads the target of a symbolic link asynchronously.
+     * @param path - The path to the symbolic link.
+     * @returns A promise that resolves with the target path as a string.
+     */
     readLink(path: string | URL): Promise<string>;
 
+    /**
+     * Reads the target of a symbolic link synchronously.
+     * @param path - The path to the symbolic link.
+     * @returns The target path as a string.
+     */
     readLinkSync(path: string | URL): string;
 
+    /**
+     * Reads the contents of a file as text synchronously.
+     * @param path - The path to the file.
+     * @returns The file contents as a string.
+     */
     readTextFileSync(path: string | URL): string;
 
+    /**
+     * Reads the contents of a file as text asynchronously.
+     * @param path - The path to the file.
+     * @param options - The options for reading the file (optional).
+     * @returns A promise that resolves with the file contents as a string.
+     */
     readTextFile(path: string | URL, options?: ReadOptions): Promise<string>;
 
+    /**
+     * Resolves the real path of a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @returns A promise that resolves with the real path as a string.
+     */
     realPath(path: string | URL): Promise<string>;
 
+    /**
+     * Resolves the real path of a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @returns The real path as a string.
+     */
     realPathSync(path: string | URL): string;
 
+    /**
+     * Removes a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @param options - The options for removing the file or directory (optional).
+     * @returns A promise that resolves when the operation is complete.
+     */
     remove(
         path: string | URL,
         options?: RemoveOptions,
     ): Promise<void>;
 
+    /**
+     * Removes a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @param options - The options for removing the file or directory (optional).
+     */
     removeSync(path: string | URL, options?: RemoveOptions): void;
 
+    /**
+     * Renames a file or directory asynchronously.
+     * @param oldPath - The path to the existing file or directory.
+     * @param newPath - The path to the new file or directory.
+     * @returns A promise that resolves when the operation is complete.
+     */
     rename(
         oldPath: string | URL,
         newPath: string | URL,
     ): Promise<void>;
 
+    /**
+     * Renames a file or directory synchronously.
+     * @param oldPath - The path to the existing file or directory.
+     * @param newPath - The path to the new file or directory.
+     */
     renameSync(oldPath: string | URL, newPath: string | URL): void;
 
+    /**
+     * Gets information about a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @returns A promise that resolves with the file information.
+     */
     stat(path: string | URL): Promise<FileInfo>;
 
+    /**
+     * Gets information about a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @returns The file information.
+     */
     statSync(path: string | URL): FileInfo;
 
+    /**
+     * Creates a symbolic link asynchronously.
+     * @param target - The path to the target file or directory.
+     * @param path - The path to the symbolic link.
+     * @param type - The type of the symbolic link (optional).
+     * @returns A promise that resolves when the operation is complete.
+     */
     symlink(
         target: string | URL,
         path: string | URL,
         type?: SymlinkOptions,
     ): Promise<void>;
 
+    /**
+     * Creates a symbolic link synchronously.
+     * @param target - The path to the target file or directory.
+     * @param path - The path to the symbolic link.
+     * @param type - The type of the symbolic link (optional).
+     */
     symlinkSync(
         target: string | URL,
         path: string | URL,
         type?: SymlinkOptions,
     ): void;
 
+    /**
+     * Writes text data to a file synchronously.
+     * @param path - The path to the file.
+     * @param data - The text data to write.
+     * @param options - The options for writing the file (optional).
+     */
     writeTextFileSync(
         path: string | URL,
         data: string,
         options?: WriteOptions,
     ): void;
 
+    /**
+     * Writes text data to a file asynchronously.
+     * @param path - The path to the file.
+     * @param data - The text data to write.
+     * @param options - The options for writing the file (optional).
+     * @returns A promise that resolves when the operation is complete.
+     */
     writeTextFile(
         path: string | URL,
         data: string,
         options?: WriteOptions,
     ): Promise<void>;
 
+    /**
+     * Writes binary data to a file asynchronously.
+     * @param path - The path to the file.
+     * @param data - The binary data to write.
+     * @param options - The options for writing the file (optional).
+     * @returns A promise that resolves when the operation is complete.
+     */
     writeFile(
         path: string | URL,
         data: Uint8Array | ReadableStream<Uint8Array>,
         options?: WriteOptions | undefined,
     ): Promise<void>;
 
+    /**
+     * Writes binary data to a file synchronously.
+     * @param path - The path to the file.
+     * @param data - The binary data to write.
+     * @param options - The options for writing the file (optional).
+     */
     writeFileSync(
         path: string | URL,
         data: Uint8Array,
         options?: WriteOptions | undefined,
     ): void;
 
+    /**
+     * Changes the access time and modification time of a file or directory asynchronously.
+     * @param path - The path to the file or directory.
+     * @param atime - The new access time.
+     * @param mtime - The new modification time.
+     * @returns A promise that resolves when the operation is complete.
+     */
     utime(
         path: string | URL,
         atime: number | Date,
         mtime: number | Date,
     ): Promise<void>;
 
+    /**
+     * Changes the access time and modification time of a file or directory synchronously.
+     * @param path - The path to the file or directory.
+     * @param atime - The new access time.
+     * @param mtime - The new modification time.
+     */
     utimeSync(
         path: string | URL,
         atime: number | Date,

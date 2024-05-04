@@ -69,13 +69,13 @@ Deno.test("ensureSymlink() ensures linkName links to target", async function () 
     try {
         await makeDir(testDir, { recursive: true });
         await writeFile(testFile, new Uint8Array());
-    
+
         await ensureSymlink(testFile, linkFile);
         await ensureSymlink(testFile, linkFile);
-    
+
         const srcStat = await lstat(testFile);
         const linkStat = await lstat(linkFile);
-    
+
         assertEquals(srcStat.isFile, true);
         assertEquals(linkStat.isSymlink, true);
     } finally {
@@ -91,13 +91,13 @@ Deno.test("ensureSymlinkSync() ensures linkName links to target", function () {
     try {
         makeDirSync(testDir, { recursive: true });
         writeFileSync(testFile, new Uint8Array());
-    
+
         ensureSymlinkSync(testFile, linkFile);
         ensureSymlinkSync(testFile, linkFile);
-    
+
         const srcStat = lstatSync(testFile);
         const linkStat = lstatSync(linkFile);
-    
+
         assertEquals(srcStat.isFile, true);
         assertEquals(linkStat.isSymlink, true);
     } finally {
@@ -181,25 +181,21 @@ Deno.test("ensureSymlink() ensures dir linkName links to dir target", async func
     try {
         await makeDir(testDir, { recursive: true });
         await writeFile(testFile, new Uint8Array());
-    
+
         await ensureSymlink(testDir, linkDir);
         await ensureSymlink(testDir, linkDir);
-    
+
         const testDirStat = await lstat(testDir);
         const linkDirStat = await lstat(linkDir);
         const testFileStat = await lstat(testFile);
-    
+
         assertEquals(testFileStat.isFile, true);
         assertEquals(testDirStat.isDirectory, true);
         assertEquals(linkDirStat.isSymlink, true);
-    }
-    finally {
+    } finally {
         await remove(linkDir, { recursive: true });
         await remove(testDir, { recursive: true });
     }
-
-
-  
 });
 
 Deno.test("ensureSymlinkSync() ensures dir linkName links to dir target", function () {

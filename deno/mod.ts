@@ -27,6 +27,10 @@ export function gid(): number | null {
     return Deno.gid();
 }
 
+export function cwd(): string {
+    return Deno.cwd();
+}
+
 export function copyFile(
     from: string | URL,
     to: string | URL,

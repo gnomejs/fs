@@ -221,6 +221,8 @@ export interface FileSystem {
 
     chownSync(path: string | URL, uid: number, gid: number): void;
 
+    cwd(): string;
+
     copyFile(
         from: string | URL,
         to: string | URL,

@@ -42,6 +42,10 @@ export function gid(): number | null {
     return gid;
 }
 
+export function cwd(): string {
+    return process.cwd();
+}
+
 function randomName(prefix?: string, suffix?: string): string {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     const rng = crypto.getRandomValues(new Uint8Array(12));

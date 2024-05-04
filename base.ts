@@ -15,6 +15,7 @@ if (g.process && g.process.versions && g.process.versions.node) {
 
 export const copyFile = fs.copyFile;
 export const copyFileSync = fs.copyFileSync;
+export const cwd = fs.cwd;
 export const isDir = fs.isDir;
 export const isDirSync = fs.isDirSync;
 export const isFile = fs.isFile;

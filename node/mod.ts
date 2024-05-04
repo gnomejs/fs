@@ -146,12 +146,12 @@ export function lstat(path: string | URL): Promise<FileInfo> {
 }
 
 export function lstatSync(path: string | URL): FileInfo {
-    const stat = Deno.lstatSync(path);
+    const stat = fs.lstatSync(path);
     const p = path instanceof URL ? path.toString() : path;
     return {
-        isFile: stat.isFile,
-        isDirectory: stat.isDirectory,
-        isSymlink: stat.isSymlink,
+        isFile: stat.isFile(),
+        isDirectory: stat.isDirectory(),
+        isSymlink: stat.isSymbolicLink(),
         name: basename(p),
         path: p,
         size: stat.size,
@@ -167,10 +167,10 @@ export function lstatSync(path: string | URL): FileInfo {
         nlink: stat.nlink,
         rdev: stat.rdev,
         blocks: stat.blocks,
-        isBlockDevice: stat.isBlockDevice,
-        isCharDevice: stat.isCharDevice,
-        isSocket: stat.isSocket,
-        isFifo: stat.isFifo,
+        isBlockDevice: stat.isBlockDevice(),
+        isCharDevice: stat.isCharacterDevice(),
+        isSocket: stat.isSocket(),
+        isFifo: stat.isFIFO(),
     };
 }
 
@@ -202,12 +202,13 @@ export function makeTempDirSync(options?: MakeTempOptions): string {
         options.dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
     }
 
-    const r = randomName(options.prefix, options.suffix);
-    const sep = WIN ? "\\" : "/";
-    const dir = `${options.dir}${sep}${r}`;
+  
+    let dir = options.dir;
+    if (options.prefix) {
+        dir = join(dir, options.prefix);
+    }
 
-    fs.mkdirSync(r, { recursive: true });
-    return dir;
+    return fs.mkdtempSync(dir)
 }
 
 export async function makeTempDir(options?: MakeTempOptions): Promise<string> {
@@ -218,12 +219,13 @@ export async function makeTempDir(options?: MakeTempOptions): Promise<string> {
         options.dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
     }
 
-    const r = randomName(options.prefix, options.suffix);
-    const sep = WIN ? "\\" : "/";
-    const dir = `${options.dir}${sep}${r}`;
+    
+    let dir = options.dir;
+    if (options.prefix) {
+        dir = join(dir, options.prefix);
+    }
 
-    await fsa.mkdir(r, { recursive: true, mode: 744 });
-    return dir;
+    return await fsa.mkdtemp(dir);
 }
 
 export function makeTempFileSync(options?: MakeTempOptions): string {
@@ -241,7 +243,7 @@ export function makeTempFileSync(options?: MakeTempOptions): string {
 
     const file = `${options.dir}${sep}${r}`;
 
-    fs.writeFileSync(file, new Uint8Array(0), { mode: 744 });
+    fs.writeFileSync(file, new Uint8Array(0), { mode: 0o644 });
     return file;
 }
 
@@ -260,7 +262,8 @@ export async function makeTempFile(options?: MakeTempOptions): Promise<string> {
 
     const file = `${options.dir}${sep}${r}`;
 
-    fs.writeFileSync(file, new Uint8Array(0), { mode: 744 });
+    fs.writeFileSync(file, new Uint8Array(0), { mode: 0o644 });
+    
     return file;
 }
 
@@ -279,12 +282,13 @@ export function makeDirSync(
 }
 
 export function stat(path: string | URL): Promise<FileInfo> {
-    return Deno.stat(path).then((stat) => {
+    return fsa.stat(path).then((stat) => {
         const p = path instanceof URL ? path.toString() : path;
+        console.log(path, stat.isSymbolicLink())
         return {
-            isFile: stat.isFile,
-            isDirectory: stat.isDirectory,
-            isSymlink: stat.isSymlink,
+            isFile: stat.isFile(),
+            isDirectory: stat.isDirectory(),
+            isSymlink: stat.isSymbolicLink(),
             name: basename(p),
             path: p,
             size: stat.size,
@@ -300,10 +304,10 @@ export function stat(path: string | URL): Promise<FileInfo> {
             nlink: stat.nlink,
             rdev: stat.rdev,
             blocks: stat.blocks,
-            isBlockDevice: stat.isBlockDevice,
-            isCharDevice: stat.isCharDevice,
-            isSocket: stat.isSocket,
-            isFifo: stat.isFifo,
+            isBlockDevice: stat.isBlockDevice(),
+            isCharDevice: stat.isCharacterDevice(),
+            isSocket: stat.isSocket(),
+            isFifo: stat.isFIFO(),
         };
     });
 }
@@ -327,13 +331,13 @@ export function isAlreadyExistsError(err: unknown): boolean {
 }
 
 export function statSync(path: string | URL): FileInfo {
-    const stat = Deno.statSync(path);
+    const stat = fs.statSync(path);
     const p = path instanceof URL ? path.toString() : path;
 
     return {
-        isFile: stat.isFile,
-        isDirectory: stat.isDirectory,
-        isSymlink: stat.isSymlink,
+        isFile: stat.isFile(),
+        isDirectory: stat.isDirectory(),
+        isSymlink: stat.isSymbolicLink(),
         name: basename(p),
         path: p,
         size: stat.size,
@@ -349,10 +353,10 @@ export function statSync(path: string | URL): FileInfo {
         nlink: stat.nlink,
         rdev: stat.rdev,
         blocks: stat.blocks,
-        isBlockDevice: stat.isBlockDevice,
-        isCharDevice: stat.isCharDevice,
-        isSocket: stat.isSocket,
-        isFifo: stat.isFifo,
+        isBlockDevice: stat.isBlockDevice(),
+        isCharDevice: stat.isCharacterDevice(),
+        isSocket: stat.isSocket(),
+        isFifo: stat.isFIFO(),
     };
 }
 
@@ -366,8 +370,8 @@ export function readDir(
     const iterator = async function* () {
         const data = await fsa.readdir(path);
         for (const d of data) {
-            const info = await stat(join(path, d));
-
+            const info = await lstat(join(path, d));
+            
             yield {
                 name: d,
                 isFile: info.isFile,
@@ -389,7 +393,7 @@ export function* readDirSync(
 
     const data = fs.readdirSync(path);
     for (const d of data) {
-        const info = statSync(join(path, d));
+        const info = lstatSync(join(path, d));
 
         yield {
             name: d,
@@ -479,15 +483,24 @@ export function renameSync(oldPath: string | URL, newPath: string | URL): void {
     return fs.renameSync(oldPath, newPath);
 }
 
-export function remove(
+export async function remove(
     path: string | URL,
     options?: RemoveOptions,
 ): Promise<void> {
-    return fsa.rm(path, options);
+
+    const isFolder = await isDir(path);
+    if (isFolder)
+        return await fsa.rmdir(path, { ...options } );
+
+    return fsa.rm(path, { ...options, force: true, } );
 }
 
 export function removeSync(path: string | URL, options?: RemoveOptions): void {
-    return fs.rmSync(path, options);
+    const isFolder = isDirSync(path);
+    if (isFolder)
+        return fs.rmdirSync(path, { ...options } );
+
+    return fs.rmSync(path, { ...options, force: true, } );
 }
 
 export function symlink(

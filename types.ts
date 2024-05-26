@@ -373,6 +373,20 @@ export interface FileSystem {
     makeTempDir(options?: MakeTempOptions): Promise<string>;
 
     /**
+     * Creates a temporary file synchronously.
+     * @param options - The options for creating the temporary file (optional).
+     * @returns The path to the created temporary file.
+     */
+    makeTempFileSync(options?: MakeTempOptions): string;
+
+    /**
+     * Creates a temporary file asynchronously.
+     * @param options - The options for creating the temporary file (optional).
+     * @returns A promise that resolves with the path to the created temporary file.
+     */
+    makeTempFile(options?: MakeTempOptions): Promise<string>;
+
+    /**
      * Reads the contents of a directory asynchronously.
      * @param path - The path to the directory.
      * @returns An async iterable that yields directory information.

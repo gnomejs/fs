@@ -252,14 +252,17 @@ export async function makeTempFile(options?: MakeTempOptions): Promise<string> {
     options ??= {};
     options.prefix ??= "tmp";
 
+    let dir: string;
     if (!options.dir) {
-        options.dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
+        dir = WIN ? (process.env.TEMP ?? "c:\\Temp") : (process.env.TMPDIR ?? "/tmp");
+    } else {
+        dir = options.dir;
     }
 
     const r = randomName(options.prefix, options.suffix);
     const sep = WIN ? "\\" : "/";
 
-    await makeDir(options.dir, { recursive: true });
+    await makeDir(dir, { recursive: true });
 
     const file = `${options.dir}${sep}${r}`;
 
